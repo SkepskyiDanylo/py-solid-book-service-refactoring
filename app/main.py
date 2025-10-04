@@ -4,8 +4,10 @@ from app.printers import ConsolePrinter, ReversePrinter, BookPrinter
 from app.serializers import JsonSerializer, XmlSerializer, BookSerializer
 
 
-def main(book: Book, commands: list[tuple[str, str]]) -> None | str | list[str]:
-    serializing_results = []
+def main(
+        book: Book,
+        commands: list[tuple[str, str]]
+) -> None | str | list[str]:
 
     for cmd, method_type in commands:
         if cmd == "display":
