@@ -1,5 +1,8 @@
 import json
-import xml.etree.ElementTree as ET
+
+from app.displayers import ConsoleDisplay, ReverseDisplay, BookDisplay
+from app.printers import ConsolePrinter, ReversePrinter, BookPrinter
+from app.serializers import JsonSerializer, XmlSerializer, BookSerializer
 
 
 class Book:
@@ -39,14 +42,43 @@ class Book:
             raise ValueError(f"Unknown serialize type: {serialize_type}")
 
 
-def main(book: Book, commands: list[tuple[str, str]]) -> None | str:
+def main(book: Book, commands: list[tuple[str, str]]) -> None | str | list[str]:
+    serializing_results = []
+
     for cmd, method_type in commands:
         if cmd == "display":
-            book.display(method_type)
+
+            if method_type == "console":
+                display = ConsoleDisplay()
+            elif method_type == "reverse":
+                display = ReverseDisplay()
+            else:
+                raise ValueError(f"Unknown method type: {method_type}")
+            BookDisplay(display).display_book(book)
+
         elif cmd == "print":
-            book.print_book(method_type)
+            if method_type == "console":
+                printer = ConsolePrinter()
+            elif method_type == "reverse":
+                printer = ReversePrinter()
+            else:
+                raise ValueError(f"Unknown method type: {method_type}")
+            BookPrinter(printer).print_book(book)
+
         elif cmd == "serialize":
-            return book.serialize(method_type)
+            if method_type == "json":
+                serializer = JsonSerializer()
+            elif method_type == "xml":
+                serializer = XmlSerializer()
+            else:
+                raise ValueError(f"Unknown serializer type: {method_type}")
+            data = BookSerializer(serializer).serialize_book(book)
+            serializing_results.append(data)
+
+        else:
+            raise ValueError(f"Unknown command: {cmd}")
+
+    return serializing_results
 
 
 if __name__ == "__main__":
