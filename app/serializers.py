@@ -34,4 +34,4 @@ class BookSerializer:
         self.serializer = serializer
 
     def serialize_book(self, book: Book):
-        self.serializer.serialize(book)
+        return self.serializer.serialize(book)

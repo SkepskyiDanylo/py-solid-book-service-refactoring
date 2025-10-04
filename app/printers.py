@@ -6,20 +6,22 @@ from app.books import Book
 class Printer(ABC):
 
     @abstractmethod
-    def print(self, data: str) -> None:
+    def print(self, book: Book) -> None:
         pass
 
 
 class ConsolePrinter(Printer):
 
-    def print(self, data: str) -> None:
-        print(data)
+    def print(self, book) -> None:
+        print(f"Printing the book: {book.title}...")
+        print(book.content)
 
 
 class ReversePrinter(Printer):
 
-    def print(self, data: str) -> None:
-        print(data[::-1])
+    def print(self, book) -> None:
+        print(f"Printing the book in reverse: {book.title}...")
+        print(book.content[::-1])
 
 
 class BookPrinter:
@@ -28,4 +30,4 @@ class BookPrinter:
         self.printer = printer
 
     def print_book(self, book: Book) -> None:
-        self.printer.print(book.content)
+        self.printer.print(book)
